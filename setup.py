@@ -1,41 +1,38 @@
-from lib.encrypt import key_gen, Crypt
-import json
-import sys
-
-
-def save_to_file(key: str, api_key: str, secret_key: str) -> None:
-    json_dict: dict = {"KEY": key, "API_KEY": api_key, "API_SECRET_KEY": secret_key}
-    with open("./conf/credentials.json", "w") as file:
-        json.dump(json_dict, file, indent=4)
+from lib.crypt import Crypt
 
 
 def main():
-    key: str = key_gen(32)
-    crypt: Crypt = Crypt()
-    api_key: str = input("input your API_KEY of bitflyer: ")
-    secret_key: str = input("input your API_SECRET_KEY of bitflyer: ")
+    print("---start---")
+    crypt = Crypt()
 
-    # API_KEYを暗号化
-    crypted_api_key: str = crypt.encrypt(api_key, key)
-    # SPI_SECRET_KEYを暗号化
-    crypted_secret_key: str = crypt.encrypt(secret_key, key)
+    api_key = input("input your API Key: ")
+    secret_key = input("input your SECRET API Key: ")
+    key = crypt.key.decode(crypt.ENCODE)
+    print(f"\tkey: {key}")
+    print(f"\tapi_key: {api_key}")
+    print(f"\tsecret_key: {secret_key}")
 
-    # 復号化したAPI_KEY
-    decrypted_api_key: str = crypt.decrypt(crypted_api_key, key)
-    # 復号化したAPI_SECRET_KEY
-    decrypted_secret_key: str = crypt.decrypt(crypted_secret_key, key)
+    crypted_api_key: str = crypt.encrypt(api_key)
+    crypted_secret_key: str = crypt.encrypt(secret_key)
+    print(f"\tcrypted api key: {crypted_api_key}")
+    print(f"\tcrypted secret key: {crypted_secret_key}")
 
-    # チェック
-    if api_key != decrypted_api_key:
-        print("API_KEYの暗号化失敗")
-        sys.exit(1)
-    if secret_key != decrypted_secret_key:
-        print("API_SECRET_KEYの暗号化失敗")
-        sys.exit(1)
+    check = Crypt()
+    decrypted_api_key = check.decrypt(target_bytes=crypted_api_key.encode(Crypt.ENCODE), key=key.encode(Crypt.ENCODE))
+    decrypted_secret_key = check.decrypt(target_bytes=crypted_secret_key.encode(Crypt.ENCODE), key=key.encode(Crypt.ENCODE))
 
-    # confファイルに保存
-    save_to_file(key=key, api_key=crypted_api_key, secret_key=crypted_secret_key)
-    print("end")
+    if api_key == decrypted_api_key:
+        print(f"decrypt succeeded! API KEY: {decrypted_api_key}")
+    else:
+        print("decrypt failure API KEY")
+
+    if secret_key == decrypted_secret_key:
+        print(f"decrypt succeeded! SECRET KEY: {decrypted_secret_key}")
+    else:
+        print("decrypt failure SECRET KEY")
+
+    crypt.save(api_key=crypted_api_key, secret_key=crypted_secret_key, key=key)
+    print("---end---")
 
 
 if __name__ == "__main__":
