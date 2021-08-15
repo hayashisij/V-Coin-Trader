@@ -3,8 +3,7 @@ import requests
 
 from requests import Response
 from datetime import date, datetime
-from ..lib.crypt import Crypt
-
+from crypt import Crypt
 
 class BitFlyerError(Exception):
     pass
