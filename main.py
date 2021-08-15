@@ -5,7 +5,7 @@ def main():
     bitflyer = BitFlyer()
     from_date = datetime.date(year=2021, month=7, day=21)
     chats = bitflyer.get_chats(from_date=from_date)
-    permssion = bitflyer.get_balance()
+    balance = bitflyer.get_balance()
     print("end")
 
 if __name__ == '__main__':
