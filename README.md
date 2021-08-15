@@ -9,7 +9,7 @@ $ pipenv install
 
 # for dev
 $ cd V-Coin-Trader
-$ pipenv install -dev
+$ pipenv install --dev
 ```
 - setup for run
 ```bash
