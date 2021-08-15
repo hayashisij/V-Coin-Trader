@@ -17,18 +17,19 @@ class RequestParamError(BitFlyerError):
 class BitFlyer:
     def __init__(self):
         self.base_url: str = "https://api.bitflyer.com"
-        API_KEY: str = ""
-        API_SECRET_KEY: str = ""
+        api_key: str = ""
+        api_secret_key: str = ""
         # TODO: 暗号化してあるAPI_KEYを復号してTupleで返すメソッドを作る
         # API_KEY, API_SECRET_KEY = decryption_api_keys()
 
         crypt = Crypt()
+        api_key, api_secret_key = crypt.load()
 
         timestamp: datetime = datetime.now()
         self.header: dict = {
-            'ACCESS-KEY': API_KEY,
+            'ACCESS-KEY': api_key,
             'ACCESS-TIMESTAMP': timestamp,
-            'ACCESS-SIGN': API_SECRET_KEY,
+            'ACCESS-SIGN': api_secret_key,
             'Content-Type': 'application/json'
         }
 
