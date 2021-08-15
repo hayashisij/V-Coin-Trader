@@ -3,16 +3,20 @@ import requests
 
 from requests import Response
 from datetime import date, datetime
-from encrypt import Crypt
+from ..lib.crypt import Crypt
+
 
 class BitFlyerError(Exception):
     pass
 
+
 class ApiRequestError(BitFlyerError):
     pass
 
+
 class RequestParamError(BitFlyerError):
     pass
+
 
 class BitFlyer:
     def __init__(self):
