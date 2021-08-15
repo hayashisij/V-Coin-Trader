@@ -22,9 +22,6 @@ class BitFlyer:
         self.base_url: str = "https://api.bitflyer.com"
         api_key: str = ""
         api_secret_key: str = ""
-        # TODO: 暗号化してあるAPI_KEYを復号してTupleで返すメソッドを作る
-        # API_KEY, API_SECRET_KEY = decryption_api_keys()
-
         crypt = Crypt()
         api_key, api_secret_key = crypt.load()
 
