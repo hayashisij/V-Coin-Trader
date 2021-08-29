@@ -20,16 +20,16 @@ class RequestParamError(BitFlyerError):
 class BitFlyer:
     def __init__(self):
         self.base_url: str = "https://api.bitflyer.com"
-        api_key: str = ""
-        api_secret_key: str = ""
+        self.api_key: str = ""
+        self.api_secret_key: str = ""
         crypt = Crypt()
-        api_key, api_secret_key = crypt.load()
+        self.api_key, self.api_secret_key = crypt.load()
 
         timestamp: datetime = datetime.now()
         self.header: dict = {
-            'ACCESS-KEY': api_key,
+            'ACCESS-KEY': self.api_key,
             'ACCESS-TIMESTAMP': timestamp,
-            'ACCESS-SIGN': api_secret_key,
+            'ACCESS-SIGN': self.api_secret_key,
             'Content-Type': 'application/json'
         }
 
