@@ -18,8 +18,12 @@ def main():
     print(f"\tcrypted secret key: {crypted_secret_key}")
 
     check = Crypt()
-    decrypted_api_key = check.decrypt(target_bytes=crypted_api_key.encode(Crypt.ENCODE), key=key.encode(Crypt.ENCODE))
-    decrypted_secret_key = check.decrypt(target_bytes=crypted_secret_key.encode(Crypt.ENCODE), key=key.encode(Crypt.ENCODE))
+    decrypted_api_key = check.decrypt(
+        target_bytes=crypted_api_key.encode(Crypt.ENCODE), key=key.encode(Crypt.ENCODE)
+    )
+    decrypted_secret_key = check.decrypt(
+        target_bytes=crypted_secret_key.encode(Crypt.ENCODE), key=key.encode(Crypt.ENCODE)
+    )
 
     if api_key == decrypted_api_key:
         print(f"decrypt succeeded! API KEY: {decrypted_api_key}")

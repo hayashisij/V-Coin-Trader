@@ -3,7 +3,8 @@ import requests
 
 from requests import Response
 from datetime import date, datetime
-from crypt import Crypt
+from .crypt import Crypt
+
 
 class BitFlyerError(Exception):
     pass
@@ -27,13 +28,15 @@ class BitFlyer:
 
         timestamp: datetime = datetime.now()
         self.header: dict = {
-            'ACCESS-KEY': self.api_key,
-            'ACCESS-TIMESTAMP': timestamp,
-            'ACCESS-SIGN': self.api_secret_key,
-            'Content-Type': 'application/json'
+            "ACCESS-KEY": self.api_key,
+            "ACCESS-TIMESTAMP": timestamp,
+            "ACCESS-SIGN": self.api_secret_key,
+            "Content-Type": "application/json",
         }
 
-    def do_request(self, method: str, endpoint: str, params: dict = None, data: dict = None) -> Response:
+    def do_request(
+        self, method: str, endpoint: str, params: dict = None, data: dict = None
+    ) -> Response:
         url: str = self.base_url + endpoint
         response: Response
         if method == "GET":
@@ -71,28 +74,39 @@ class BitFlyer:
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # Ticker
-    def get_ticker(self,  cryptocurrency_code: str) -> Response:
+    def get_ticker(self, cryptocurrency_code: str) -> Response:
         endpoint: str = "/v1/getticker"
         method: str = "GET"
         payload: dict = {"product_code": cryptocurrency_code}
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 約定履歴
-    def get_executions(self, cryptocurrency_code: str, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize):
+    def get_executions(
+        self,
+        cryptocurrency_code: str,
+        count: int = 100,
+        before: int = sys.maxsize,
+        after: int = -sys.maxsize,
+    ):
         endpoint: str = "/v1/getexecutions"
         method: str = "GET"
-        payload: dict = {"product_code": cryptocurrency_code, "count": count, "before": before, "after": after}
+        payload: dict = {
+            "product_code": cryptocurrency_code,
+            "count": count,
+            "before": before,
+            "after": after,
+        }
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 板の状態
-    def get_board_state(self,  cryptocurrency_code: str) -> Response:
+    def get_board_state(self, cryptocurrency_code: str) -> Response:
         endpoint: str = "/v1/getboardstate"
         method: str = "GET"
         payload: dict = {"product_code": cryptocurrency_code}
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 取引所の状態
-    def get_health(self,  cryptocurrency_code: str) -> Response:
+    def get_health(self, cryptocurrency_code: str) -> Response:
         endpoint: str = "/v1/gethealth"
         method: str = "GET"
         payload: dict = {"product_code": cryptocurrency_code}
@@ -105,10 +119,10 @@ class BitFlyer:
         return self.do_request(method=method, endpoint=endpoint)
 
     # チャット
-    def get_chats(self,  from_date: date) -> Response:
+    def get_chats(self, from_date: date) -> Response:
         endpoint: str = "/v1/getchats"
         method: str = "GET"
-        payload: dict = {"from_date": from_date.strftime('%Y-%m-%d')}
+        payload: dict = {"from_date": from_date.strftime("%Y-%m-%d")}
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # HTTP Private APIのエンドポイント
@@ -143,14 +157,14 @@ class BitFlyer:
         return self.do_request(method=method, endpoint=endpoint)
 
     # 仮想通貨預入履歴
-    def get_coin_ins(self, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize):
+    def get_coin_ins(self, count: int = 100, before: int = sys.maxsize, after: int = -sys.maxsize):
         endpoint: str = "/v1/me/getcoinins"
         method: str = "GET"
         payload: dict = {"count": count, "before": before, "after": after}
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 仮想通貨送付履歴
-    def get_coin_outs(self, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize):
+    def get_coin_outs(self, count: int = 100, before: int = sys.maxsize, after: int = -sys.maxsize):
         endpoint: str = "/v1/me/getcoinouts"
         method: str = "GET"
         payload: dict = {"count": count, "before": before, "after": after}
@@ -174,11 +188,22 @@ class BitFlyer:
     def post_withdraw(self, currency_code: str, bank_account_id: int, amount: int, code: int):
         endpoint: str = "/v1/me/withdraw"
         method: str = "POST"
-        payload: dict = {"currency_code": currency_code, "bank_account_id": bank_account_id, "amount": amount, "code": code}
+        payload: dict = {
+            "currency_code": currency_code,
+            "bank_account_id": bank_account_id,
+            "amount": amount,
+            "code": code,
+        }
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 出金履歴
-    def get_withdrawals(self, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize, message_id: str = ""):
+    def get_withdrawals(
+        self,
+        count: int = 100,
+        before: int = sys.maxsize,
+        after: int = -sys.maxsize,
+        message_id: str = "",
+    ):
         endpoint: str = "/v1/me/getwithdrawals"
         method: str = "GET"
         payload: dict = {"count": count, "before": before, "after": after, "message_id": message_id}
@@ -187,10 +212,27 @@ class BitFlyer:
     # 新規注文を出す
     # TODO: POSTのBODYパラメータがこの渡し方で機能するかの確認
     # TODO: sideは"BUY"か"SELL"以外は指定できないため、例外処理の方法を検討する
-    def post_send_child_order(self, product_code: str, child_order_type: str, side: str, price: int, size: int, minute_to_expire: int = 43200, time_in_force: str = "GTC"):
+    def post_send_child_order(
+        self,
+        product_code: str,
+        child_order_type: str,
+        side: str,
+        price: int,
+        size: int,
+        minute_to_expire: int = 43200,
+        time_in_force: str = "GTC",
+    ):
         endpoint: str = "/v1/me/sendchildorder"
         method: str = "POST"
-        payload: dict = {"product_code": product_code, "child_order_type": child_order_type, "side": side, "price": price, "size": size, "minute_to_expire": minute_to_expire, "time_in_force": time_in_force}
+        payload: dict = {
+            "product_code": product_code,
+            "child_order_type": child_order_type,
+            "side": side,
+            "price": price,
+            "size": size,
+            "minute_to_expire": minute_to_expire,
+            "time_in_force": time_in_force,
+        }
         return self.do_request(method=method, endpoint=endpoint, data=payload)
 
     # 注文をキャンセルする
@@ -222,10 +264,16 @@ class BitFlyer:
         pass
 
     # 親注文をキャンセルする
-    def post_cancel_parent_order(self, product_code: str, parent_order_id: str, parent_order_acceptance_id: str):
+    def post_cancel_parent_order(
+        self, product_code: str, parent_order_id: str, parent_order_acceptance_id: str
+    ):
         endpoint: str = "/v1/me/cancelparentorder"
         method: str = "POST"
-        payload: dict = {"product_code": product_code, "parent_order_id": parent_order_id, "parent_order_acceptance_id": parent_order_acceptance_id}
+        payload: dict = {
+            "product_code": product_code,
+            "parent_order_id": parent_order_id,
+            "parent_order_acceptance_id": parent_order_acceptance_id,
+        }
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 全ての注文をキャンセルする
@@ -236,38 +284,109 @@ class BitFlyer:
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 注文の一覧を取得
-    def get_child_orders(self, product_code: str, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize, child_order_state: str = "", child_order_id: str = "", child_order_acceptance_id: str = "", parent_order_id: str = ""):
+    def get_child_orders(
+        self,
+        product_code: str,
+        count: int = 100,
+        before: int = sys.maxsize,
+        after: int = -sys.maxsize,
+        child_order_state: str = "",
+        child_order_id: str = "",
+        child_order_acceptance_id: str = "",
+        parent_order_id: str = "",
+    ):
         endpoint: str = "/v1/me/getchildorders"
         method: str = "GET"
-        payload: dict = {"product_code": product_code, "count": count, "before": before, "after": after, "child_order_state": child_order_state, "child_order_id": child_order_id, "child_order_acceptance_id": child_order_acceptance_id, "parent_order_id": parent_order_id}
+        payload: dict = {
+            "product_code": product_code,
+            "count": count,
+            "before": before,
+            "after": after,
+            "child_order_state": child_order_state,
+            "child_order_id": child_order_id,
+            "child_order_acceptance_id": child_order_acceptance_id,
+            "parent_order_id": parent_order_id,
+        }
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 親注文の一覧を取得
-    def get_parent_orders(self, product_code: str, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize, parent_order_state: str = ""):
+    def get_parent_orders(
+        self,
+        product_code: str,
+        count: int = 100,
+        before: int = sys.maxsize,
+        after: int = -sys.maxsize,
+        parent_order_state: str = "",
+    ):
         endpoint: str = "/v1/me/getparentorders"
         method: str = "GET"
-        payload: dict = {"product_code": product_code, "count": count, "before": before, "after": after, "child_order_state": parent_order_state}
+        payload: dict = {
+            "product_code": product_code,
+            "count": count,
+            "before": before,
+            "after": after,
+            "child_order_state": parent_order_state,
+        }
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 親注文の詳細を取得
-    def get_parent_order(self, product_code: str, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize, parent_order_state: str = ""):
+    def get_parent_order(
+        self,
+        product_code: str,
+        count: int = 100,
+        before: int = sys.maxsize,
+        after: int = -sys.maxsize,
+        parent_order_state: str = "",
+    ):
         endpoint: str = "/v1/me/getparentorder"
         method: str = "GET"
-        payload: dict = {"product_code": product_code, "count": count, "before": before, "after": after, "child_order_state": parent_order_state}
+        payload: dict = {
+            "product_code": product_code,
+            "count": count,
+            "before": before,
+            "after": after,
+            "child_order_state": parent_order_state,
+        }
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 約定の一覧を取得
-    def get_executions(self, product_code: str, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize, child_order_id: str = "", child_order_acceptance_id: str = ""):
+    def get_executions(
+        self,
+        product_code: str,
+        count: int = 100,
+        before: int = sys.maxsize,
+        after: int = -sys.maxsize,
+        child_order_id: str = "",
+        child_order_acceptance_id: str = "",
+    ):
         endpoint: str = "/v1/me/getexecutions"
         method: str = "GET"
-        payload: dict = {"product_code": product_code, "count": count, "before": before, "after": after, "child_order_id": child_order_id, "child_order_acceptance_id": child_order_acceptance_id}
+        payload: dict = {
+            "product_code": product_code,
+            "count": count,
+            "before": before,
+            "after": after,
+            "child_order_id": child_order_id,
+            "child_order_acceptance_id": child_order_acceptance_id,
+        }
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 残高履歴を取得
-    def get_balance_history(self, currency_code: str, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize):
+    def get_balance_history(
+        self,
+        currency_code: str,
+        count: int = 100,
+        before: int = sys.maxsize,
+        after: int = -sys.maxsize,
+    ):
         endpoint: str = "/v1/me/getbalancehistory"
         method: str = "GET"
-        payload: dict = {"currency_code": currency_code, "count": count, "before": before, "after": after}
+        payload: dict = {
+            "currency_code": currency_code,
+            "count": count,
+            "before": before,
+            "after": after,
+        }
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 建玉の一覧を取得
@@ -278,7 +397,9 @@ class BitFlyer:
         return self.do_request(method=method, endpoint=endpoint, params=payload)
 
     # 証拠金の変動履歴を取得
-    def get_collateral_history(self, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize):
+    def get_collateral_history(
+        self, count: int = 100, before: int = sys.maxsize, after: int = -sys.maxsize
+    ):
         endpoint: str = "/v1/me/getcollateralhistory"
         method: str = "GET"
         payload: dict = {"count": count, "before": before, "after": after}

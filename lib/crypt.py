@@ -1,6 +1,7 @@
-from cryptography.fernet import Fernet
 import json
 from typing import Final
+
+from cryptography.fernet import Fernet
 
 
 class Crypt:
@@ -33,5 +34,8 @@ class Crypt:
             str_api_key: str = credentials.get("API_KEY")
             str_secret_key: str = credentials.get("SECRET_API_KEY")
 
-            return self.decrypt(target_bytes=str_api_key.encode(Crypt.ENCODE), key=str_key.encode(Crypt.ENCODE)), \
-                self.decrypt(target_bytes=str_secret_key.encode(Crypt.ENCODE), key=str_key.encode(Crypt.ENCODE))
+            return self.decrypt(
+                target_bytes=str_api_key.encode(Crypt.ENCODE), key=str_key.encode(Crypt.ENCODE)
+            ), self.decrypt(
+                target_bytes=str_secret_key.encode(Crypt.ENCODE), key=str_key.encode(Crypt.ENCODE)
+            )

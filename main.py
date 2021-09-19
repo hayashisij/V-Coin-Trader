@@ -1,5 +1,6 @@
-from lib.public import PublicAPI
 import datetime
+
+from lib.public import PublicAPI
 
 
 def main():
@@ -18,5 +19,5 @@ def main():
     print("end")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

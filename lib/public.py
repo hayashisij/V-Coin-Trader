@@ -1,5 +1,6 @@
 import sys
 from datetime import date
+
 import requests
 
 
@@ -45,8 +46,13 @@ class PublicAPI:
         return self.base_get(path=path, params=params)
 
     # 約定履歴
-    def get_executions(self, product_code: str = None, count: int = 100, before: int = sys.maxsize,
-                       after: int = -sys.maxsize):
+    def get_executions(
+        self,
+        product_code: str = None,
+        count: int = 100,
+        before: int = sys.maxsize,
+        after: int = -sys.maxsize,
+    ):
         path: str = "/v1/getexecutions"
         params: dict = {"code": product_code, "count": count, "before": before, "after": after}
         return self.base_get(path=path, params=params)
