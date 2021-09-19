@@ -71,5 +71,5 @@ class PublicAPI:
     # チャット
     def get_chats(self, from_date: date):
         path: str = "/v1/getchats"
-        params: dict = {"from_date": from_date.strftime('%Y-%m-%d')}
+        params: dict = {"from_date": from_date.isoformat()}
         return self.base_get(path=path, params=params)

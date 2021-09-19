@@ -4,7 +4,7 @@ import datetime
 
 def main():
     pub = PublicAPI()
-    from_date = datetime.datetime(year=2021, month=9, day=1)
+    from_date = datetime.datetime(year=2021, month=9, day=15, hour=0, minute=0, second=0)
 
     markets = pub.get_markets()
     board = pub.get_board()
