@@ -3,7 +3,7 @@ from datetime import date
 import requests
 
 
-class ApiError(BaseException):
+class ApiError(Exception):
     pass
 
 
