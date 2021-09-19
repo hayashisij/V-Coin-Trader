@@ -1,16 +1,14 @@
 import sys
 from datetime import date
-
 import requests
-from requests import Response
 
 
-class ApiError(Exception):
-    def ApiRequestError(self, res: Response):
-        if res is None:
-            print(f"status code: null")
-        else:
-            print(f"status code: {res.status_code}")
+class ApiError(BaseException):
+    pass
+
+
+class ApiResponseError(ApiError):
+    pass
 
 
 class PublicAPI:
@@ -22,10 +20,10 @@ class PublicAPI:
         response = requests.get(url=url, params=params)
 
         if response is None:
-            raise ApiError.ApiRequestError(response)
+            raise ApiResponseError("Response is Null")
 
         if response.status_code != 200:
-            raise ApiError.ApiRequestError(response)
+            raise ApiResponseError(f"status code: {response.status_code}")
 
         return response
 
@@ -47,7 +45,8 @@ class PublicAPI:
         return self.base_get(path=path, params=params)
 
     # 約定履歴
-    def get_executions(self, product_code: str = None, count: int = 100, before: int = sys.maxsize , after: int = -sys.maxsize):
+    def get_executions(self, product_code: str = None, count: int = 100, before: int = sys.maxsize,
+                       after: int = -sys.maxsize):
         path: str = "/v1/getexecutions"
         params: dict = {"code": product_code, "count": count, "before": before, "after": after}
         return self.base_get(path=path, params=params)
@@ -70,8 +69,7 @@ class PublicAPI:
         return self.base_get(path=path)
 
     # チャット
-    def get_chats(self,  from_date: date):
+    def get_chats(self, from_date: date):
         path: str = "/v1/getchats"
         params: dict = {"from_date": from_date.strftime('%Y-%m-%d')}
         return self.base_get(path=path, params=params)
-
