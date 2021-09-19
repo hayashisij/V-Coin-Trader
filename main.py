@@ -1,13 +1,22 @@
-from lib.bitflyer import BitFlyer, BitFlyerError
+from lib.public import PublicAPI
 import datetime
 
+
 def main():
-    bitflyer = BitFlyer()
-    from_date = datetime.date(year=2021, month=7, day=21)
-    chats = bitflyer.get_chats(from_date=from_date)
-    coins = bitflyer.get_coin_ins()
+    pub = PublicAPI()
+    from_date = datetime.datetime(year=2021, month=9, day=15, hour=0, minute=0, second=0)
+
+    markets = pub.get_markets()
+    board = pub.get_board()
+    ticker = pub.get_ticker()
+    executions = pub.get_executions()
+    broadest = pub.get_board_state()
+    health = pub.get_health()
+    leverage = pub.get_corporateleverage()
+    chats = pub.get_chats(from_date)
 
     print("end")
+
 
 if __name__ == '__main__':
     main()
