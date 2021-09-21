@@ -4,7 +4,7 @@
 
 ```bash
 # Pipenvの仮想環境をプロジェクト内に作成する設定
-$ echo export PIPENV_VENV_IN_PROJECT=1 >> ~/.zshrc
+$ echo 'export PIPENV_VENV_IN_PROJECT=1' >> ~/.zshrc
 
 # for prod
 $ cd V-Coin-Trader
