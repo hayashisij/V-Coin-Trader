@@ -6,12 +6,14 @@ name = "pypi"
 [packages]
 requests = "*"
 cryptography = "*"
-black = "*"
-isort = "*"
 
 [dev-packages]
-#black = "*"
+black = "21.9b0"
+isort = "*"
 pytest = "*"
 
 [requires]
 python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true
